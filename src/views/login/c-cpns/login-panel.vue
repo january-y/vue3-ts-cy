@@ -11,7 +11,7 @@
               <span>账号登入</span>
             </div>
           </template>
-          <PanelAccount />
+          <PanelAccount ref="accountRef" />
         </el-tab-pane>
         <el-tab-pane name="phone">
           <template #label>
@@ -46,13 +46,12 @@ import PanelPhone from './panel-phone.vue'
 
 const ElPanelValue = ref('account')
 let isRemPwd = ref(false)
+const accountRef = ref<InstanceType<typeof PanelAccount>>()
 
 function handleLoginBtnClick() {
   if (ElPanelValue.value === 'account') {
-    console.log(ElPanelValue.value)
-    console.log('账号密码登入')
+    accountRef.value?.loginHandle()
   } else {
-    console.log(ElPanelValue.value)
     console.log('手机号登入')
   }
 }

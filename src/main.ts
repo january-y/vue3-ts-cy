@@ -5,6 +5,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
 import 'normalize.css'
 import '@/assets/css/index.less'
+// message组件不会自动导入样式
+import 'element-plus/theme-chalk/el-message.css'
 import pinia from './store'
 
 const app = createApp(App)

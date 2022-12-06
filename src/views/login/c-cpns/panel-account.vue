@@ -5,6 +5,8 @@
       label-width="60px"
       size="large"
       :rules="accountRules"
+      status-icon
+      ref="fromRef"
     >
       <el-form-item label="帐号" prop="name">
         <el-input v-model="account.name" />
@@ -17,8 +19,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
-import type { FormRules } from 'element-plus'
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import type { FormRules, ElForm } from 'element-plus'
+// import { accountLoginRequest } from '@/service/login/index'
+import useLoginStore from '@/store/login/index'
 
 interface useAccount {
   name: string
@@ -32,14 +37,47 @@ let account = reactive<useAccount>({
 
 const accountRules = reactive<FormRules>({
   name: [
-    { required: true, message: '请输入正确的账号', trigger: 'blur' },
+    { required: true, message: '必须输入帐号信息~', trigger: 'blur' },
     {
-      min: 3,
-      max: 20,
-      message: '长度为3-20之间',
+      pattern: /^[a-z0-9]{6,20}$/,
+      message: '必须是6~20数字或字母组成~',
       trigger: 'blur',
     },
   ],
+  pwd: [
+    { required: true, message: '必须输入密码信息~', trigger: 'blur' },
+    {
+      pattern: /^[a-z0-9]{3,}$/,
+      message: '必须是3位以上数字或字母组成',
+      trigger: 'blur',
+    },
+  ],
+})
+
+// login
+const fromRef = ref<InstanceType<typeof ElForm>>()
+const loginStore = useLoginStore()
+function loginHandle() {
+  fromRef.value?.validate((res) => {
+    if (res) {
+      console.log('验证成功')
+      const name = account.name
+      const pwd = account.pwd
+
+      loginStore.loginAccountAction({ name, password: pwd })
+    } else {
+      console.log('验证失败')
+      ElMessage({
+        showClose: true,
+        message: 'Oops, this is a error message.',
+        type: 'error',
+      })
+    }
+  })
+}
+
+defineExpose({
+  loginHandle,
 })
 </script>
 
