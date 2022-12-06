@@ -4,7 +4,7 @@
     <!--  -->
     <div class="tabs">
       <el-tabs v-model="ElPanelValue" type="border-card" stretch>
-        <el-tab-pane label="账号登入" name="account">
+        <el-tab-pane name="account">
           <template #label>
             <div class="label">
               <el-icon class="el-icon-margin"><UserFilled /></el-icon>
@@ -13,7 +13,7 @@
           </template>
           <PanelAccount />
         </el-tab-pane>
-        <el-tab-pane label="手机登入" name="phone">
+        <el-tab-pane name="phone">
           <template #label>
             <div class="phone">
               <el-icon class="el-icon-margin"><Cellphone /></el-icon>
