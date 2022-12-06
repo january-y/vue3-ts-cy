@@ -11,8 +11,7 @@
               <span>账号登入</span>
             </div>
           </template>
-          <div>哈哈哈</div>
-          <div>哈哈哈</div>
+          <PanelAccount />
         </el-tab-pane>
         <el-tab-pane label="手机登入" name="phone">
           <template #label>
@@ -21,8 +20,7 @@
               <span>手机登入</span>
             </div>
           </template>
-          <div>手机登入</div>
-          <div>手机登入</div>
+          <PanelPhone />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -43,6 +41,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import PanelAccount from './panel-account.vue'
+import PanelPhone from './panel-phone.vue'
 
 const ElPanelValue = ref('account')
 let isRemPwd = ref(false)
