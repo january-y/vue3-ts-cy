@@ -10,3 +10,18 @@ export function accountLoginRequest(account: LoginRequest) {
     data: account,
   })
 }
+
+export function getUserInfoById(id: number) {
+  return axRequest.get({
+    url: `/users/${id}`,
+    // headers: {
+    //   Authorization: 'Bearer ' + localCache.getCache('token'),
+    // },
+  })
+}
+
+export function getUserMenusByRoleId(id: number) {
+  return axRequest.get({
+    url: `/role/${id}/menu`,
+  })
+}

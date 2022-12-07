@@ -14,7 +14,7 @@ const router = createRouter({
     },
     {
       path: '/main',
-      component: () => import('@/views/main/Main.vue'),
+      component: () => import('@/views/main/main.vue'),
     },
     {
       path: '/:pathMatch(.*)',
@@ -24,7 +24,7 @@ const router = createRouter({
 })
 
 // 路由守卫
-router.beforeEach((to, from) => {
+router.beforeEach((to) => {
   const token = localCache.getCache('token')
   if (to.path === '/main' && !token) {
     return '/login'

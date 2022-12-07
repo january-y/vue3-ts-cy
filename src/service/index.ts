@@ -1,3 +1,4 @@
+import { localCache } from '@/utils/cache'
 import { BASE_URL, TIME_OUT } from './config'
 import AxRequtst from './request'
 
@@ -7,6 +8,10 @@ const axRequest = new AxRequtst({
   interceptors: {
     requestSucessFn: (config) => {
       // console.log('axRequest的请求成功拦截')
+      const token = localCache.getCache('token')
+      if (config.headers && token) {
+        config.headers.Authorization = 'Bearer ' + token
+      }
       return config
     },
     requestFailureFn: (err) => {
