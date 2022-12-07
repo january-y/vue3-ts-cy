@@ -24,6 +24,7 @@ import { ElMessage } from 'element-plus'
 import type { FormRules, ElForm } from 'element-plus'
 // import { accountLoginRequest } from '@/service/login/index'
 import useLoginStore from '@/store/login/index'
+import { localCache } from '@/utils/cache'
 
 interface useAccount {
   name: string
@@ -31,8 +32,8 @@ interface useAccount {
 }
 
 let account = reactive<useAccount>({
-  name: '',
-  pwd: '',
+  name: localCache.getCache('name') ?? '',
+  pwd: localCache.getCache('password') ?? '',
 })
 
 const accountRules = reactive<FormRules>({
@@ -57,14 +58,26 @@ const accountRules = reactive<FormRules>({
 // login
 const fromRef = ref<InstanceType<typeof ElForm>>()
 const loginStore = useLoginStore()
-function loginHandle() {
+function loginHandle(isRemPwd: boolean) {
   fromRef.value?.validate((res) => {
     if (res) {
       console.log('验证成功')
       const name = account.name
       const pwd = account.pwd
 
-      loginStore.loginAccountAction({ name, password: pwd })
+      // 发送登入请求
+      loginStore.loginAccountAction({ name, password: pwd }).then(() => {
+        // 成功返回promise 登入成功记住密码
+        if (isRemPwd) {
+          localCache.setCache('name', name)
+          localCache.setCache('password', pwd)
+          localCache.setCache('isRemPwd', true)
+        } else {
+          localCache.removeCache('name')
+          localCache.removeCache('password')
+          localCache.removeCache('isRemPwd')
+        }
+      })
     } else {
       console.log('验证失败')
       ElMessage({
@@ -75,7 +88,6 @@ function loginHandle() {
     }
   })
 }
-
 defineExpose({
   loginHandle,
 })

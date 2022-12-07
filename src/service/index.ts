@@ -15,7 +15,7 @@ const axRequest = new AxRequtst({
     },
     responseSucessFn: (res) => {
       // console.log('axRequest的响应成功拦截')
-      return res
+      return res.data
     },
     responseFailureFn: (err) => {
       // console.log('axRequest的响应失败拦截')

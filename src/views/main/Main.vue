@@ -1,14 +1,19 @@
 <template>
   <div class="main">
     <h2>main</h2>
-    <h2>{{ counterStore.counter }}--{{ counterStore.doubleCounter }}</h2>
+    <button @click="handExitLogin">退出登入</button>
   </div>
 </template>
 
 <script setup lang="ts">
-import useCounterStore from '@/store/counter'
+import { localCache } from '@/utils/cache'
+import { useRouter } from 'vue-router'
 
-const counterStore = useCounterStore()
+const router = useRouter()
+function handExitLogin() {
+  localCache.removeCache('token')
+  router.push('/login')
+}
 </script>
 
 <style lang="less" scoped>

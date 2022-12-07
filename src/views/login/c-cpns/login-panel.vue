@@ -40,17 +40,18 @@
 </template>
 
 <script setup lang="ts">
+import { localCache } from '@/utils/cache'
 import { ref } from 'vue'
 import PanelAccount from './panel-account.vue'
 import PanelPhone from './panel-phone.vue'
 
 const ElPanelValue = ref('account')
-let isRemPwd = ref(false)
+let isRemPwd = ref(localCache.getCache('isRemPwd') ?? false)
 const accountRef = ref<InstanceType<typeof PanelAccount>>()
 
 function handleLoginBtnClick() {
   if (ElPanelValue.value === 'account') {
-    accountRef.value?.loginHandle()
+    accountRef.value?.loginHandle(isRemPwd.value)
   } else {
     console.log('手机号登入')
   }
