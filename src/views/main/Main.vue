@@ -8,7 +8,9 @@
         <el-header class="main-header" height="70px">
           <main-header @onFlodChange="handleFoldChange" />
         </el-header>
-        <el-main class="main-main">Main</el-main>
+        <el-main class="main-main">
+          <router-view></router-view>
+        </el-main>
       </el-container>
     </el-container>
   </div>

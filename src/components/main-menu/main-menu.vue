@@ -27,7 +27,10 @@
             </template>
 
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item :index="subitem.id + ''">
+              <el-menu-item
+                :index="subitem.id + ''"
+                @click="handlePushPage(subitem)"
+              >
                 {{ subitem.name }}
               </el-menu-item>
             </template>
@@ -82,11 +85,17 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/store/login'
+import { useRouter } from 'vue-router'
 
 defineProps<{ isFold?: boolean }>()
+const router = useRouter()
+
 const loginStore = useLoginStore()
 const userMenu = loginStore.userMenu
-console.log(userMenu)
+
+function handlePushPage(item: any) {
+  router.push(item.url)
+}
 </script>
 
 <style lang="less" scoped>
