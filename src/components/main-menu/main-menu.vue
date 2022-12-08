@@ -3,7 +3,7 @@
     <!-- logo -->
     <div class="logo">
       <img src="@/assets/img/logo.svg" class="img" alt="" />
-      <h2 class="title">january-cms</h2>
+      <h2 v-show="!isFold" class="title">january-cms</h2>
     </div>
     <!-- menu -->
     <div class="menu">
@@ -13,11 +13,16 @@
         text-color="#b7bdc3"
         active-text-color="#fff"
         background-color="#001529"
+        :collapse="isFold"
       >
         <!-- 遍历menu数据 -->
         <template v-for="item in userMenu" :key="item.id">
           <el-sub-menu :index="item.id + ''">
             <template #title>
+              <el-icon>
+                <component :is="item.icon.split('-icon-')[1]" />
+              </el-icon>
+
               <span>{{ item.name }}</span>
             </template>
 
@@ -77,6 +82,8 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/store/login'
+
+defineProps<{ isFold?: boolean }>()
 const loginStore = useLoginStore()
 const userMenu = loginStore.userMenu
 console.log(userMenu)
@@ -89,10 +96,13 @@ console.log(userMenu)
 }
 .logo {
   display: flex;
-  justify-content: center;
-  align-items: center;
   height: 28px;
-  padding: 12px 10px 8px 0;
+  padding: 12px 10px 8px 10px;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  overflow: hidden;
+
   .img {
     height: 100%;
     margin: 0 10px;
