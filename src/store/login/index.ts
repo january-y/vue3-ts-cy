@@ -7,7 +7,7 @@ import { accountLoginRequest } from '@/service/login'
 import { defineStore } from 'pinia'
 import { localCache } from '@/utils/cache'
 import router from '@/router/index'
-import type { RouteRecordRaw } from 'vue-router'
+// import type { RouteRecordRaw } from 'vue-router'
 
 interface IResult {
   token?: string
@@ -38,7 +38,47 @@ const useLoginStore = defineStore('login', {
       localCache.setCache('userMenus', userMenuResult.data)
 
       // 路由
-      const localRoutes: RouteRecordRaw[] = []
+      localCache.setCache('localRoutes', [])
+      const localRoutes = localCache.getCache('localRoutes')
+      // 获取all路由ts文件
+      const files: Record<string, any> = import.meta.glob(
+        '../../router/main/**/*.ts',
+        {
+          eager: true,
+        },
+      )
+      for (const key in files) {
+        const module = files[key]
+        localRoutes.push(module.default)
+      }
+      // 根据菜单匹配路由
+      let firstMenu: any = null
+      for (const menu of this.userMenu) {
+        for (const submenu of menu.children) {
+          const route = localRoutes.find(
+            (item: any) => item.path === submenu.url,
+          )
+          if (firstMenu === null && route) firstMenu = route
+          if (route) router.addRoute('main', route)
+        }
+      }
+
+      // login
+      router.push(firstMenu)
+    },
+    loadLocalCacheAction() {
+      // 1.用户进行刷新默认加载数据
+      const token = localCache.getCache('token')
+      const userInfo = localCache.getCache('userInfo')
+      const userMenus = localCache.getCache('userMenus')
+      if (token && userInfo && userMenus) {
+        this.token = token
+        this.userInfo = userInfo
+        this.userMenu = userMenus
+      }
+
+      localCache.setCache('localRoutes', [])
+      const localRoutes = localCache.getCache('localRoutes')
       // 获取all路由ts文件
       const files: Record<string, any> = import.meta.glob(
         '../../router/main/**/*.ts',
@@ -53,13 +93,12 @@ const useLoginStore = defineStore('login', {
       // 根据菜单匹配路由
       for (const menu of this.userMenu) {
         for (const submenu of menu.children) {
-          const route = localRoutes.find((item) => item.path === submenu.url)
+          const route = localRoutes.find(
+            (item: any) => item.path === submenu.url,
+          )
           if (route) router.addRoute('main', route)
         }
       }
-
-      // login
-      router.push('/main')
     },
   },
 })

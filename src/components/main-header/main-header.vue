@@ -6,7 +6,7 @@
       </el-icon>
     </div>
     <div class="content">
-      <div class="breadcrumb">面包屑</div>
+      <header-bread></header-bread>
       <header-info />
     </div>
   </div>
@@ -15,6 +15,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import HeaderInfo from '../main-header/c-cps/header-info.vue'
+import HeaderBread from './c-cps/header-bread.vue'
+
 const emit = defineEmits(['onFlodChange'])
 
 let isFold = ref(false)

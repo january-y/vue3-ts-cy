@@ -16,6 +16,7 @@ const router = createRouter({
       path: '/main',
       name: 'main',
       component: () => import('@/views/main/main.vue'),
+      children: [{ path: '/main', redirect: '/main/analysis/overview' }],
     },
     {
       path: '/:pathMatch(.*)',

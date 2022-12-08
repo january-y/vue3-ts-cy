@@ -9,7 +9,7 @@
     <div class="menu">
       <!-- 1.系统总览 -->
       <el-menu
-        default-active="3"
+        :default-active="defaultActive"
         text-color="#b7bdc3"
         active-text-color="#fff"
         background-color="#001529"
@@ -85,10 +85,13 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/store/login'
-import { useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { mapPathToMenu } from '@/utils/map'
 
 defineProps<{ isFold?: boolean }>()
 const router = useRouter()
+const route = useRoute()
 
 const loginStore = useLoginStore()
 const userMenu = loginStore.userMenu
@@ -96,6 +99,9 @@ const userMenu = loginStore.userMenu
 function handlePushPage(item: any) {
   router.push(item.url)
 }
+
+const nowPath = mapPathToMenu(route.path, userMenu)
+const defaultActive = ref(nowPath.id + '')
 </script>
 
 <style lang="less" scoped>
