@@ -92,11 +92,24 @@ const useLoginStore = defineStore('login', {
       }
       // 根据菜单匹配路由
       for (const menu of this.userMenu) {
+        let routeFlag: any = ''
         for (const submenu of menu.children) {
           const route = localRoutes.find(
             (item: any) => item.path === submenu.url,
           )
-          if (route) router.addRoute('main', route)
+          // 路由添加重定向
+          if (routeFlag === '') {
+            router.addRoute(menu.url, {
+              path: menu.url,
+              redirect: submenu.url,
+            })
+          }
+          routeFlag = menu.url
+
+          if (route) {
+            // router.addRoute()
+            router.addRoute('main', route)
+          }
         }
       }
     },

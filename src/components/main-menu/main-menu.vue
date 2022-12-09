@@ -85,7 +85,7 @@
 
 <script setup lang="ts">
 import useLoginStore from '@/store/login'
-import { ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { mapPathToMenu } from '@/utils/map'
 
@@ -100,8 +100,10 @@ function handlePushPage(item: any) {
   router.push(item.url)
 }
 
-const nowPath = mapPathToMenu(route.path, userMenu)
-const defaultActive = ref(nowPath.id + '')
+const defaultActive = computed(() => {
+  const nowPath = mapPathToMenu(route.path, userMenu)
+  return nowPath.id + ''
+})
 </script>
 
 <style lang="less" scoped>
