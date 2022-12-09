@@ -15,7 +15,9 @@ module.exports = {
     ecmaVersion: 'latest',
   },
   rules: {
-    'vue/multi-word-component-names': 'off',
     // 关闭组件命名驼峰
+    'vue/multi-word-component-names': 'off',
+    // 关闭const提示
+    'prefer-const': 'off',
   },
 }
