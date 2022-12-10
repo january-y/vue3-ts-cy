@@ -68,7 +68,7 @@
     <div class="pagination">
       <el-pagination
         v-model:current-page="currentPage"
-        v-model:page-size="currentSize"
+        v-model:page-size="pageSize"
         :page-sizes="[10, 20, 30]"
         layout="total, sizes, prev, pager, next, jumper"
         :total="userTotalCount"
@@ -83,16 +83,41 @@
 import useSystemStore from '@/store/main/system/systems'
 import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
-import { ref } from 'vue'
+import { ref, getCurrentInstance, onUnmounted } from 'vue'
 
+const instance = getCurrentInstance()
 const systemStore = useSystemStore()
-systemStore.getUserListAction()
+const currentPage = ref<any>(1)
+const pageSize = ref<any>(10)
+fetchUserListData()
+
 const { userList, userTotalCount } = storeToRefs(systemStore)
 
-const currentPage = ref('')
-const currentSize = ref('')
-function handleSizeChange() {}
-function handleCurrentChange() {}
+function handleSizeChange() {
+  fetchUserListData()
+}
+function handleCurrentChange() {
+  fetchUserListData()
+}
+// 起请求函数
+function fetchUserListData(otherData: any = null) {
+  const size = pageSize.value
+  const offset = (currentPage.value - 1) * size
+
+  const info = { size, offset, ...otherData }
+
+  systemStore.getUserListAction(info)
+}
+
+// mitt
+function search(data: any) {
+  fetchUserListData(data)
+}
+instance?.proxy?.mitt.on('on-search', search)
+
+onUnmounted(() => {
+  instance?.proxy?.mitt.off('on-search')
+})
 </script>
 
 <style lang="less" scoped>

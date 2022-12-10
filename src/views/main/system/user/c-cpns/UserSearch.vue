@@ -78,8 +78,10 @@
 <script setup lang="ts">
 // 表单绑定searchForm item绑定prop(searchForm里的属性)
 import type { ElForm } from 'element-plus'
-import { reactive, ref } from 'vue'
+import { reactive, ref, getCurrentInstance, onUnmounted } from 'vue'
+import useSystemStore from '@/store/main/system/systems'
 
+const instance = getCurrentInstance()
 interface IUserSearch {
   name?: any
   realname?: any
@@ -87,6 +89,7 @@ interface IUserSearch {
   enable?: any
   createAt: any
 }
+
 const searchForm = ref<InstanceType<typeof ElForm>>()
 const userSearch: IUserSearch = reactive({
   name: '',
@@ -95,12 +98,20 @@ const userSearch: IUserSearch = reactive({
   enable: 1,
   createAt: [],
 })
+const systemStore = useSystemStore()
 function handleReset() {
   searchForm.value?.resetFields()
+  instance?.proxy?.mitt.emit('on-reset')
 }
+// mitt
 function handleSearch() {
-  console.log('查询数据')
+  instance?.proxy?.mitt.emit('on-search', { name: userSearch.name })
 }
+instance?.proxy?.mitt.on('on-reset', systemStore.getUserListAction)
+
+onUnmounted(() => {
+  instance?.proxy?.mitt.off('on-reset')
+})
 </script>
 
 <style lang="less" scoped>

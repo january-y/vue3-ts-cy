@@ -1,11 +1,8 @@
 import { axRequest } from '@/service'
 
-export function getUserListData() {
+export function getUserListData(query: any) {
   return axRequest.post({
     url: '/users/list',
-    data: {
-      offset: 0,
-      size: 10,
-    },
+    data: query,
   })
 }

@@ -15,6 +15,7 @@
     "axios": "^1.2.0",
     "dayjs": "^1.11.7",
     "element-plus": "^2.2.26",
+    "mitt": "^3.0.0",
     "normalize.css": "^8.0.1",
     "pinia": "^2.0.27",
     "pinia-plugin-persistedstate": "^3.0.1",

@@ -8,9 +8,11 @@ const useSystemStore = defineStore(
     let userList = ref<any>(null)
     let userTotalCount = ref<any>(null)
 
-    const getUserListAction = async () => {
-      const userListData = await getUserListData()
+    const getUserListAction = async (query: any) => {
+      const userListData = await getUserListData(query)
       const { list, totalCount } = userListData.data
+      // console.log(userListData.data)
+
       userList.value = list
       userTotalCount.value = totalCount
     }
