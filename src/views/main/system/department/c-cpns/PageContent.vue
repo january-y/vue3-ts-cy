@@ -1,45 +1,37 @@
 <template>
   <div class="content">
     <div class="header">
-      <h3 class="title">用户列表</h3>
-      <el-button type="primary" @click="handlenNewUser">新建用户</el-button>
+      <h3 class="title">部门列表</h3>
+      <el-button type="primary" @click="handlenNewUser">新建部门</el-button>
     </div>
     <div class="table">
-      <el-table :data="userList" border style="width: 100%">
-        <el-table-column type="selection" width="55" align="center" />
-        <el-table-column type="index" width="55" label="序号" align="center" />
+      <el-table :data="pageList" border style="width: 100%">
+        <el-table-column align="center" type="selection" width="60px" />
+        <el-table-column
+          align="center"
+          type="index"
+          label="序号"
+          width="60px"
+        />
 
         <el-table-column
+          align="center"
+          label="部门名称"
           prop="name"
-          label="用户名"
-          width="180"
-          align="center"
+          width="150px"
         />
         <el-table-column
-          prop="realname"
-          label="真实姓名"
-          width="120"
           align="center"
+          label="部门领导"
+          prop="leader"
+          width="150px"
         />
         <el-table-column
-          prop="cellphone"
-          label="手机号码"
-          width="150"
           align="center"
+          label="上级部门"
+          prop="parentId"
+          width="150px"
         />
-
-        <el-table-column prop="enable" label="状态" width="75" align="center">
-          <!-- 作用域插槽 -->
-          <template #default="scope">
-            <el-button
-              :type="scope.row.enable ? 'primary' : 'danger'"
-              size="small"
-              plain
-            >
-              {{ scope.row.enable ? '启用' : '禁用' }}
-            </el-button>
-          </template>
-        </el-table-column>
 
         <el-table-column prop="createAt" label="创建时间" align="center">
           <!-- 作用域插槽 -->
@@ -85,7 +77,7 @@
         v-model:page-size="pageSize"
         :page-sizes="[10, 20, 30]"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="userTotalCount"
+        :total="pageTotalCount"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
       />
@@ -103,19 +95,19 @@ const instance = getCurrentInstance()
 const systemStore = useSystemStore()
 const currentPage = ref<any>(1)
 const pageSize = ref<any>(10)
-fetchUserListData()
+fetchPageListData()
 
-const { userList, userTotalCount } = storeToRefs(systemStore)
+const { pageList, pageTotalCount } = storeToRefs(systemStore)
 
 function handlenNewUser() {
   instance?.proxy?.mitt.emit('show-modal', true)
 }
 
 function handleSizeChange() {
-  fetchUserListData()
+  fetchPageListData()
 }
 function handleCurrentChange() {
-  fetchUserListData()
+  fetchPageListData()
 }
 function handleEdit(itemData: any) {
   // 编辑
@@ -125,23 +117,23 @@ function handleEdit(itemData: any) {
   instance?.proxy?.mitt.emit('editid', itemData.id)
 }
 // 起请求函数
-function fetchUserListData(otherData: any = null) {
+function fetchPageListData(otherData: any = null) {
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
 
   const info = { size, offset, ...otherData }
 
-  systemStore.getUserListAction(info)
+  systemStore.getPageListDataAction('department', info)
 }
 
 // mitt
 function search(data: any) {
-  fetchUserListData(data)
+  fetchPageListData(data)
 }
 instance?.proxy?.mitt.on('on-search', search)
 
 function handleDelete(id: number) {
-  systemStore.deleteUserByIdAction(id)
+  systemStore.deletePageByIdAction('department', id)
 }
 
 onUnmounted(() => {

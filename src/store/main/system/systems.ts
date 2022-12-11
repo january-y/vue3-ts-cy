@@ -1,4 +1,11 @@
-import { deleteUserById, getUserListData } from '@/service/main/system/system'
+import {
+  deletePageById,
+  deleteUserById,
+  editUserData,
+  getPageListData,
+  getUserListData,
+  newUserData,
+} from '@/service/main/system/system'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -7,6 +14,10 @@ const useSystemStore = defineStore(
   () => {
     let userList = ref<any>(null)
     let userTotalCount = ref<any>(null)
+
+    // global
+    let pageList = ref<any>(null)
+    let pageTotalCount = ref<any>(0)
 
     // 拿数据
     const getUserListAction = async (query: any) => {
@@ -19,13 +30,49 @@ const useSystemStore = defineStore(
     }
 
     const deleteUserByIdAction = async (id: number) => {
-      const result = await deleteUserById(id)
-      console.log(result)
+      await deleteUserById(id)
       // 刷新数据
-      getUserListAction({ offset: 1, size: 10 })
+      getUserListAction({ offset: 0, size: 10 })
     }
 
-    return { userList, userTotalCount, getUserListAction, deleteUserByIdAction }
+    const newUserDataAction = async (userInfo: any) => {
+      newUserData(userInfo)
+      // 刷新数据
+      getUserListAction({ offset: 0, size: 10 })
+    }
+
+    const editUserDataAction = async (id: number, userData: any) => {
+      editUserData(id, userData)
+      // 刷新数据
+      getUserListAction({ offset: 0, size: 10 })
+    }
+
+    const getPageListDataAction = async (pageName?: any, query?: any) => {
+      const pageResult = await getPageListData(pageName, query)
+      const { list, totalCount } = pageResult.data
+      pageTotalCount.value = totalCount
+      pageList.value = list
+    }
+
+    const deletePageByIdAction = async (pageName: string, id: number) => {
+      const res = await deletePageById(pageName, id)
+      console.log(res)
+      // 刷新数据
+      getPageListDataAction('department', { size: 10, offset: 0 })
+    }
+
+    return {
+      userList,
+      userTotalCount,
+      getUserListAction,
+      deleteUserByIdAction,
+      newUserDataAction,
+      editUserDataAction,
+      pageList,
+      pageTotalCount,
+      getPageListDataAction,
+      deletePageByIdAction,
+    }
   },
   {
     persist: true,

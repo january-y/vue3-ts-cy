@@ -7,6 +7,7 @@ import { accountLoginRequest } from '@/service/login'
 import { defineStore } from 'pinia'
 import { localCache } from '@/utils/cache'
 import router from '@/router/index'
+import useMainStore from '../main/main'
 // import type { RouteRecordRaw } from 'vue-router'
 
 interface IResult {
@@ -36,6 +37,10 @@ const useLoginStore = defineStore('login', {
 
       localCache.setCache('userInfo', userInfoResult.data)
       localCache.setCache('userMenus', userMenuResult.data)
+
+      // 加载所有角色和部门数据
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
 
       // 路由
       localCache.setCache('localRoutes', [])
@@ -112,6 +117,10 @@ const useLoginStore = defineStore('login', {
           }
         }
       }
+
+      // 加载所有角色和部门数据
+      // const mainStore = useMainStore()
+      // mainStore.fetchEntireDataAction()
     },
   },
 })

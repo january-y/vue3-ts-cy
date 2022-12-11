@@ -1,12 +1,15 @@
 <template>
   <div class="department">
-    <h2>department</h2>
+    <page-search></page-search>
+    <page-content></page-content>
+    <page-modal></page-modal>
   </div>
 </template>
 
-<script setup lang="ts" name="department"></script>
+<script setup lang="ts" name="department">
+import PageSearch from './c-cpns/PageSearch.vue'
+import PageContent from './c-cpns/PageContent.vue'
+import PageModal from './c-cpns/PageModal.vue'
+</script>
 
-<style scoped>
-.department {
-}
-</style>
+<style scoped></style>
