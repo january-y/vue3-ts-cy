@@ -6,3 +6,9 @@ export function getUserListData(query: any) {
     data: query,
   })
 }
+
+export function deleteUserById(id: number) {
+  return axRequest.delete({
+    url: `/users/${id}`,
+  })
+}

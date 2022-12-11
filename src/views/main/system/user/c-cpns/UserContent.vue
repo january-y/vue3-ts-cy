@@ -2,7 +2,7 @@
   <div class="content">
     <div class="header">
       <h3 class="title">用户列表</h3>
-      <el-button type="primary">新建用户</el-button>
+      <el-button type="primary" @click="handlenNewUser">新建用户</el-button>
     </div>
     <div class="table">
       <el-table :data="userList" border style="width: 100%">
@@ -54,13 +54,21 @@
           </template>
         </el-table-column>
 
-        <el-table-column width="170" align="center">
-          <el-button type="primary" size="small" text icon="Edit">
-            编辑
-          </el-button>
-          <el-button type="danger" size="small" text icon="Delete">
-            删除
-          </el-button>
+        <el-table-column width="170" align="center" label="操作">
+          <template #default="scope">
+            <el-button type="primary" size="small" text icon="Edit">
+              编辑
+            </el-button>
+            <el-button
+              type="danger"
+              size="small"
+              text
+              icon="Delete"
+              @click="handleDelete(scope.row.id)"
+            >
+              删除
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
     </div>
@@ -93,6 +101,10 @@ fetchUserListData()
 
 const { userList, userTotalCount } = storeToRefs(systemStore)
 
+function handlenNewUser() {
+  instance?.proxy?.mitt.emit('show-modal')
+}
+
 function handleSizeChange() {
   fetchUserListData()
 }
@@ -114,6 +126,10 @@ function search(data: any) {
   fetchUserListData(data)
 }
 instance?.proxy?.mitt.on('on-search', search)
+
+function handleDelete(id: number) {
+  systemStore.deleteUserByIdAction(id)
+}
 
 onUnmounted(() => {
   instance?.proxy?.mitt.off('on-search')

@@ -95,8 +95,8 @@ const userSearch: IUserSearch = reactive({
   name: '',
   realname: '',
   cellphone: '',
-  enable: 1,
-  createAt: [],
+  enable: '',
+  createAt: '',
 })
 const systemStore = useSystemStore()
 function handleReset() {
