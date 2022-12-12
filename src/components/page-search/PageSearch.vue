@@ -83,7 +83,10 @@ const systemStore = useSystemStore()
 function handleReset() {
   searchForm.value?.resetFields()
   // instance?.proxy?.mitt.emit('on-reset')
-  systemStore.getPageListDataAction('department', { size: 10, offset: 0 })
+  systemStore.getPageListDataAction(props.searchConfig.pageName, {
+    size: 10,
+    offset: 0,
+  })
 }
 // mitt
 function handleSearch() {
