@@ -1,9 +1,11 @@
 import {
   deletePageById,
   deleteUserById,
+  editPageData,
   editUserData,
   getPageListData,
   getUserListData,
+  newPageData,
   newUserData,
 } from '@/service/main/system/system'
 import { defineStore } from 'pinia'
@@ -61,6 +63,24 @@ const useSystemStore = defineStore(
       getPageListDataAction('department', { size: 10, offset: 0 })
     }
 
+    const newPageDataAction = async (pageName: string, pageInfo: any) => {
+      const result = await newPageData(pageName, pageInfo)
+      console.log(result)
+      // 刷新数据
+      getPageListDataAction('department', { size: 10, offset: 0 })
+    }
+
+    const editPageDataAction = async (
+      pageName: string,
+      id: number,
+      pageData: any,
+    ) => {
+      const res = editPageData(pageName, id, pageData)
+      console.log(res)
+      // 刷新数据
+      getPageListDataAction('department', { size: 10, offset: 0 })
+    }
+
     return {
       userList,
       userTotalCount,
@@ -72,6 +92,8 @@ const useSystemStore = defineStore(
       pageTotalCount,
       getPageListDataAction,
       deletePageByIdAction,
+      newPageDataAction,
+      editPageDataAction,
     }
   },
   {

@@ -78,10 +78,10 @@ function changeShow(isShow?: any) {
 
 function handleConfirm() {
   dialogShow.value = false
-  systemStore.newUserDataAction(formData)
+  systemStore.newPageDataAction('department', formData)
   if (!isNew.value) {
     // 修改数据
-    systemStore.editUserDataAction(editUserId.value, formData)
+    systemStore.editPageDataAction('department', editUserId.value, formData)
   }
 }
 

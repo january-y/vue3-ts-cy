@@ -39,3 +39,17 @@ export function deletePageById(pageName: string, id: number) {
     url: `/${pageName}/${id}`,
   })
 }
+
+export function newPageData(pageName: string, pageInfo: any) {
+  return axRequest.post({
+    url: `/${pageName}`,
+    data: pageInfo,
+  })
+}
+
+export function editPageData(pageName: string, id: number, pageData: any) {
+  return axRequest.patch({
+    url: `/${pageName}/${id}`,
+    data: pageData,
+  })
+}

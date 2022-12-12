@@ -1,17 +1,15 @@
 <template>
   <div class="department">
-    <page-search :searchConfig="searchConfig"></page-search>
+    <page-search></page-search>
     <page-content></page-content>
     <page-modal></page-modal>
   </div>
 </template>
 
 <script setup lang="ts" name="department">
-// import PageSearch from './c-cpns/PageSearch.vue'
+import PageSearch from './c-cpns/PageSearch.vue'
 import PageContent from './c-cpns/PageContent.vue'
 import PageModal from './c-cpns/PageModal.vue'
-import PageSearch from '@/components/page-search/PageSearch.vue'
-import { searchConfig } from './config/search-config'
 </script>
 
 <style scoped></style>

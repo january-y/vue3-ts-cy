@@ -119,8 +119,8 @@ const useLoginStore = defineStore('login', {
       }
 
       // 加载所有角色和部门数据
-      // const mainStore = useMainStore()
-      // mainStore.fetchEntireDataAction()
+      const mainStore = useMainStore()
+      mainStore.fetchEntireDataAction()
     },
   },
 })

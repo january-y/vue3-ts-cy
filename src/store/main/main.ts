@@ -14,7 +14,7 @@ const useMainStore = defineStore(
       const departmentResults = await getEntireDepartments()
       entireRoles.value = roleResults.data.list
       entireDepartments.value = departmentResults.data.list
-      console.log(entireRoles.value, entireDepartments.value)
+      // console.log(entireRoles.value, entireDepartments.value)
     }
 
     return { entireDepartments, entireRoles, fetchEntireDataAction }
