@@ -83,10 +83,11 @@
 import useSystemStore from '@/store/main/system/systems'
 import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
+import usePermissions from '@/hooks/usePermissions'
 import { ref, getCurrentInstance, onUnmounted } from 'vue'
 
 const props = defineProps<{
-  contentConfig?: {
+  contentConfig: {
     pageName: any
     header?: {
       title?: string
@@ -96,6 +97,13 @@ const props = defineProps<{
     childrenTree?: any
   }
 }>()
+
+// 0.获取是否有对应的增删改查的权限
+const isCreate = usePermissions(`${props.contentConfig.pageName}:create`)
+const isDelete = usePermissions(`${props.contentConfig.pageName}:delete`)
+const isUpdate = usePermissions(`${props.contentConfig.pageName}:update`)
+const isQuery = usePermissions(`${props.contentConfig.pageName}:query`)
+
 const instance = getCurrentInstance()
 const systemStore = useSystemStore()
 const currentPage = ref<any>(1)
@@ -121,8 +129,11 @@ function handleEdit(itemData: any) {
   // 传id修改数据
   instance?.proxy?.mitt.emit('editid', itemData.id)
 }
-// 起请求函数
+// 发起请求函数
 function fetchPageListData(otherData: any = null) {
+  // 判断权限
+  if (!isQuery) return
+
   const size = pageSize.value
   const offset = (currentPage.value - 1) * size
 
