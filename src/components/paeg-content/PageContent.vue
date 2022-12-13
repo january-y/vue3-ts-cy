@@ -7,7 +7,13 @@
       }}</el-button>
     </div>
     <div class="table">
-      <el-table :data="pageList" border style="width: 100%">
+      <!-- <el-table :data="pageList" border style="width: 100%" row-key="id"> -->
+      <el-table
+        :data="pageList"
+        border
+        style="width: 100%"
+        v-bind="contentConfig?.childrenTree"
+      >
         <template v-for="item in contentConfig?.propsList" :key="item.prop">
           <template v-if="item.type === 'timer'">
             <el-table-column align="center" v-bind="item">
@@ -87,6 +93,7 @@ const props = defineProps<{
       btnTitle?: string
     }
     propsList: any
+    childrenTree?: any
   }
 }>()
 const instance = getCurrentInstance()
@@ -120,8 +127,8 @@ function fetchPageListData(otherData: any = null) {
   const offset = (currentPage.value - 1) * size
 
   const info = { size, offset, ...otherData }
-  console.log(info)
-  console.log(props.contentConfig?.pageName)
+  // console.log(info)
+  // console.log(props.contentConfig?.pageName)
 
   systemStore.getPageListDataAction(props.contentConfig?.pageName, info)
 }

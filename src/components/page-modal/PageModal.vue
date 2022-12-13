@@ -38,6 +38,8 @@
                   </template>
                 </el-select>
               </template>
+
+              <!-- 自定义 -->
               <template v-if="item.type === 'custom'">
                 <slot :name="item.slotName"></slot>
               </template>
@@ -84,7 +86,7 @@ const initialData: any = {}
 for (const item of props.modalConfig.formItems) {
   initialData[item.prop] = item.initialValue ?? ''
 }
-const formData: any = reactive(initialData)
+let formData: any = reactive(initialData)
 const mainStore = useMainStore()
 const systemStore = useSystemStore()
 const { entireDepartments } = storeToRefs(mainStore)
@@ -107,13 +109,21 @@ function changeShow(isShow?: any) {
 
 function handleConfirm() {
   dialogShow.value = false
-  systemStore.newPageDataAction(props.modalConfig.pageName, formData)
+
+  // 判断是否有选择权限
+  let infoData = formData
+  if (props.otherInfo) {
+    infoData = { ...infoData, ...props.otherInfo }
+    console.log(infoData)
+  }
+
+  systemStore.newPageDataAction(props.modalConfig.pageName, infoData)
   if (!isNew.value) {
     // 修改数据
     systemStore.editPageDataAction(
       props.modalConfig.pageName,
       editUserId.value,
-      formData,
+      infoData,
     )
   }
 }
