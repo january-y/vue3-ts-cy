@@ -97,7 +97,7 @@
 import useSystemStore from '@/store/main/system/systems'
 import { storeToRefs } from 'pinia'
 import { formatUTC } from '@/utils/format'
-import { ref, getCurrentInstance, onUnmounted } from 'vue'
+import { ref, getCurrentInstance, onUnmounted, nextTick } from 'vue'
 
 const instance = getCurrentInstance()
 const systemStore = useSystemStore()
@@ -143,6 +143,21 @@ instance?.proxy?.mitt.on('on-search', search)
 function handleDelete(id: number) {
   systemStore.deleteUserByIdAction(id)
 }
+
+// 判断是否新增和获取数据，页面更新为第一页
+systemStore.$onAction(({ name, after }) => {
+  nextTick(() => {
+    after(() => {
+      if (
+        name === 'editUserDataAction' ||
+        name === 'newUserDataAction' ||
+        name === 'getUserListAction'
+      ) {
+        currentPage.value = 1
+      }
+    })
+  })
+})
 
 onUnmounted(() => {
   instance?.proxy?.mitt.off('on-search')
